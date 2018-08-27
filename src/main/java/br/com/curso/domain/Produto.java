@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -29,7 +28,7 @@ public class Produto implements Serializable{
 	private String nome;
 	private Double preco; // O correto seria BigDecimal
 	
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToMany
 	// JoinTable para criar a tabela de associação no banco de dados
 	//JoinColumns = @JoinColumn(name ="") para dizer o nome da chave estrangeira na tabela de associação.
