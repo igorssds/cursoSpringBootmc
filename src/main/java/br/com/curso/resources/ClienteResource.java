@@ -1,5 +1,6 @@
 package br.com.curso.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.curso.domain.Cliente;
 import br.com.curso.dto.ClienteDTO;
+import br.com.curso.dto.ClienteNewDTO;
 import br.com.curso.services.ClienteService;
 
 @RestController
@@ -33,6 +36,16 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO categoriaDTO){
+		
+		Cliente cliente = service.fromDTO(categoriaDTO);
+		
+		cliente = service.insert(cliente);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
+		
+		return ResponseEntity.created(uri).build(); 
+	}
 
 	@RequestMapping(value ="/{id}" , method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO clienteDTO , @PathVariable Integer id){
@@ -41,7 +54,6 @@ public class ClienteResource {
 		
 		cliente.setId(id);
 		cliente = service.update(cliente);
-		
 		return ResponseEntity.noContent().build();
 	}
 	
