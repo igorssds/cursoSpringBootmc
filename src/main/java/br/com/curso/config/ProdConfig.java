@@ -13,20 +13,12 @@ import br.com.curso.services.DBService;
 @Configuration
 @Profile("prod")
 public class ProdConfig {
-	
+
 	@Autowired
 	private DBService dbservice;
 
-	@Value("${spring.jpa.hibernate.ddl-auto}")
-	private String strategy;
-	
 	@Bean
 	public boolean instantiateDatabase() throws ParseException {
-		
-		if(!strategy.equals("create")) {
-			return false;	
-		}
-		
 		dbservice.instantiateTestDatabase();
 		return true;
 	}
