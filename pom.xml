@@ -58,6 +58,16 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
+		
+		<!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-mail -->
+		<dependency>
+		    <groupId>org.springframework.integration</groupId>
+		    <artifactId>spring-integration-mail</artifactId>
+		  
+		</dependency>
+
+
 
 	</dependencies>
 
@@ -107,6 +117,5 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
 
 </project>
