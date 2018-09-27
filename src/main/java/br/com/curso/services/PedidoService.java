@@ -14,7 +14,6 @@ import br.com.curso.domain.enums.EstadoPagamento;
 import br.com.curso.repositories.ItemPedidoRepository;
 import br.com.curso.repositories.PagamentoRepository;
 import br.com.curso.repositories.PedidoRepository;
-import br.com.curso.repositories.ProdutoRepository;
 import br.com.curso.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -35,6 +34,9 @@ public class PedidoService {
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 	
+	@Autowired
+	private ClienteService clienteService;
+	
 	public Pedido find (Integer id) {
 		
 		Optional<Pedido> obj = repo.findById(id);
@@ -45,6 +47,7 @@ public class PedidoService {
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
 		if(obj.getPagamento() instanceof PagamentoComBoleto) {
@@ -58,11 +61,13 @@ public class PedidoService {
 		
 		for(ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoService.find(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(obj);
 		}
 		
 		itemPedidoRepository.saveAll(obj.getItens());
+		System.out.println(obj);
 		return obj;
 	}
 }
